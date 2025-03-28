@@ -43,8 +43,9 @@ def MicroPar(m, n, eps_r1, eps_r2, d, w, tol):
     C0 = IGauss(V, 1, 1, d, w)
     
     # Calculer Zo et vp
-    Zo = 1 / (3e8 * (C / C0)**0.5)
-    vp = 3e8 / (eps_r1**0.5 if eps_r1 == eps_r2 else ((eps_r1 + eps_r2) / 2)**0.5)
+    epsilon=(eps_r1 if eps_r1 == eps_r2 else (eps_r1 + eps_r2) / 2)
+    Zo = epsilon**0.5/(3e8*C)
+    vp = 3e8 / epsilon**0.5
     
     return Zo, vp
 
@@ -52,7 +53,11 @@ v0=MDF(7, 6, 1, 1, 2, 3, 0.002)
 print(v0)
 c0=IGauss(v0, 1, 1, 2, 3)
 print(c0)
+VZ0=MicroPar(7, 6, 1, 1, 2, 3, 0.002)
+print(VZ0)
 v1=MDF(7, 6, 10, 1, 2, 3, 0.002)
 print(v0)
 c1=IGauss(v0, 10, 1, 2, 3)
 print(c0)
+VZ1=MicroPar(7, 6, 10, 1, 2, 3, 0.002)
+print(VZ1)
