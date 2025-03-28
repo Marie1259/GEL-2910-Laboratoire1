@@ -6,43 +6,28 @@ def MDF(m, n, eps_r1, eps_r2, d, w, tol):
     V[:, -1] = 0
     V[0, :] = 0
     V[-1, :] = 0
-    V[2, 2]=V[2, 3]=V[2, 4]=V[2, 5]=1
-
+    V[4, 2]=V[4, 3]=V[4, 4]=V[4, 5]=1
 
     # Convergence par relaxation
     diff = tol + 1
     while diff > tol:
         V_old = V.copy()
-        for i in range(1, m):
-            for j in range(1, n):
+        for i in range(1, n):
+            for j in range(1, m):
                 V[i, j] = 0.25 * (V[i+1, j] + V[i-1, j] + V[i, j+1] + V[i, j-1])
-                V[2, 2]=V[2, 3]=V[2, 4]=V[2, 5]=1
+                V[4, 2]=V[4, 3]=V[4, 4]=V[4, 5]=1
         diff = np.max(np.abs(V - V_old))
 
     return V
 
 def IGauss(V, eps_r1, eps_r2, d, w):
-    m, n = V.shape
-    epsilon = np.zeros((m, n))
-
-    # Assigner les permittivités
-    for j in range(n):
-        epsilon[:, j] = eps_r1 if j <= d else eps_r2
-
-    # Calcul du champ électrique
-    Ex = np.zeros((m, n))
-    Ey = np.zeros((m, n))
-
-    for i in range(1, m-1):
-        for j in range(1, n-1):
-            Ex[i, j] = -(V[i+1, j] - V[i-1, j]) / 2
-            Ey[i, j] = -(V[i, j+1] - V[i, j-1]) / 2
-
-    # Intégration pour trouver la charge
-    Q = np.sum(epsilon * (Ex + Ey))
+    n, m = V.shape
+   
+  
+    Q = eps_r1*(8.85e-12)*(np.sum(V[1, :])+np.sum( V[:, 1])+np.sum( V[-2, :])+np.sum( V[:, -2]))
     V_max = np.max(V)
     if V_max == 0 or np.isnan(V_max):
-    raise ValueError("V_max est nul ou invalide, vérifiez les calculs de V.")
+        raise ValueError("V_max est nul ou invalide, vérifiez les calculs de V.")
 
     C = Q / V_max
     return C
@@ -65,4 +50,9 @@ def MicroPar(m, n, eps_r1, eps_r2, d, w, tol):
 
 v0=MDF(7, 6, 1, 1, 2, 3, 0.002)
 print(v0)
-#c0=IGauss(v0, 1, 1, 2, 3)
+c0=IGauss(v0, 1, 1, 2, 3)
+print(c0)
+v1=MDF(7, 6, 10, 1, 2, 3, 0.002)
+print(v0)
+c1=IGauss(v0, 10, 1, 2, 3)
+print(c0)
