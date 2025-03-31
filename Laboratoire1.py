@@ -1,6 +1,18 @@
 import numpy as np
 
 def MDF(m, n, eps_r1, eps_r2, d, w, tol):
+    """
+    Résout l'équation de Laplace en 2D avec une méthode de relaxation.
+    
+    Paramètres :
+    - m, n : dimensions de la grille
+    - eps_r1, eps_r2 : constantes diélectriques des matériaux
+    - d, w : dimensions physiques (non utilisées ici mais laissées pour cohérence)
+    - tol : tolérance pour le critère d'arrêt
+    
+    Retourne :
+    - V : matrice des potentiels
+    """
     V = np.zeros((n+1, m+1))
     V[:, 0] = 0  # Bord à 0V
     V[:, -1] = 0
@@ -21,6 +33,17 @@ def MDF(m, n, eps_r1, eps_r2, d, w, tol):
     return V
 
 def IGauss(V, eps_r1, eps_r2, d, w):
+    """
+    Calcule la capacité en utilisant l'intégrale de Gauss.
+    
+    Paramètres :
+    - V : matrice des potentiels
+    - eps_r1, eps_r2 : constantes diélectriques des matériaux
+    - d, w : dimensions physiques (non utilisées ici mais laissées pour cohérence)
+    
+    Retourne :
+    - C : capacité calculée
+    """
     n, m = V.shape
    
   
@@ -33,6 +56,19 @@ def IGauss(V, eps_r1, eps_r2, d, w):
     return C
 
 def MicroPar(m, n, eps_r1, eps_r2, d, w, tol):
+    """
+    Calcule les paramètres Zo et vp d'une ligne de transmission.
+    
+    Paramètres :
+    - m, n : dimensions de la grille
+    - eps_r1, eps_r2 : constantes diélectriques des matériaux
+    - d, w : dimensions physiques
+    - tol : tolérance pour la convergence
+    
+    Retourne :
+    - Zo : impédance caractéristique
+    - vp : vitesse de propagation
+    """
     # Calculer les potentiels en utilisant la méthode des différences finies
     V = MDF(m, n, eps_r1, eps_r2, d, w, tol)
     
