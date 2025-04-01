@@ -70,7 +70,7 @@ def MicroPar(m, n, eps_r1, eps_r2, d, w, tol):
     C0 = IGauss(V, 1, 1, d, w)
     
     # Calculer Zo et vp
-    epsilon=(eps_r1 if eps_r1 == eps_r2 else (eps_r1 + eps_r2) / 2)
+    epsilon=C/C0
     vp = 3e8 / epsilon**0.5
     Zo = 1/(vp*C)
     
