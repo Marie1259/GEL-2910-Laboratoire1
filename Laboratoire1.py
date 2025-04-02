@@ -141,3 +141,6 @@ plt.legend()
 
 plt.tight_layout()
 plt.show()
+
+print(Z0_values)
+print(vp_values)
